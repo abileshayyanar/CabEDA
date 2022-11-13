@@ -1,0 +1,55 @@
+---
+title: "Cab EDA Notebook"
+author: "Abilesh Ayyanar"
+date: "11/13/2022"
+output: html_notebook
+---
+
+
+Hypotheses:
+
+1. Do cabs cost more in certain cities?
+
+2. Is there a correlation between cab demand and a city's climate?
+
+3. Does the average trip distance vary in different cities?
+
+4. Do more customers pay with card or cash?
+
+5. Do people in different cities pay with card/cash at different rates?
+
+```{r}
+CityPrice <- aggregate(Cab_Data$Cost.of.Trip, by = list(Cab_Data$City), FUN = mean, simplify = TRUE, drop = TRUE)
+barplot(CityPrice$x, main = "Avg Total Cost per City", names.arg = c("Atlanta, GA","Austin, TX","Boston, MA","Chicago, IL","Dallas, TX","Denver, CO","Los Angeles, CA","Miami, FL","Nashville, TN","New York, NY","Orange County, CA","Phoenix, AZ","Pittsburgh, PA","Sacramento, CA","San Diego, CA","Seattle, WA","Silicon Valley, CA","Tucson, AZ","Washington DC"), las = 2)
+```
+This graph shows the average total cost of cab trips in each city. There are no notable outliers, so I believe it is valid to compare the average cost between cities. Washington DC has a slightly higher average total cost than the rest, but it is also higher in New York, Chicago, and Boston, which are all cities with generally colder climates. Costs are lower in cities like Miami, Nashville, Austin, and San Diego which all have generally warmer climates. This answers my first and second hypotheses, as the data shows that there are certain cities with higher total costs and that cities with colder climates are generally more expensive.
+
+```{r}
+CityDistance <- aggregate(Cab_Data$KM.Travelled, by = list(Cab_Data$City), FUN = mean, simplify = TRUE, drop = TRUE)
+barplot(CityDistance$x, main = "Avg Distance Traveled per City", names.arg = c("Atlanta, GA","Austin, TX","Boston, MA","Chicago, IL","Dallas, TX","Denver, CO","Los Angeles, CA","Miami, FL","Nashville, TN","New York, NY","Orange County, CA","Phoenix, AZ","Pittsburgh, PA","Sacramento, CA","San Diego, CA","Seattle, WA","Silicon Valley, CA","Tucson, AZ","Washington DC"), las = 2)
+```
+This graph shows the average distance traveled by all cab services in each city. Again, there were no notable outliers, so by comparing the average distance, we can see that there is not a big difference between each city regarding the average travel distance that these cabs are hired for.
+
+```{r}
+CompanyPrice <- aggregate(Cab_Data$Cost.of.Trip, by = list(Cab_Data$Company), FUN = mean, simplify = TRUE, drop = TRUE)
+barplot(CompanyPrice$x, main = "Avg Cost per Company", names.arg = c("Pink Cab","Yellow Cab"))
+```
+This shows the difference between the average total cost of the two cab companies across all of the cities. There is a clear difference, as the Yellow Cab company has a noticeable higher average cost. As stated previously, there is no apparent difference in the distance traveled for each of the cab companies, so this is not a factor when comparing the average cost.
+
+```{r}
+TotalCompanyPrice <- aggregate(Cab_Data$Cost.of.Trip, by = list(Cab_Data$Company), FUN = sum, simplify = TRUE, drop = TRUE)
+barplot(TotalCompanyPrice$x, main = "Total Cost per Company", names.arg = c("Pink Cab","Yellow Cab"))
+```
+Although the Yellow Cab company had a greater average cost, we must also consider the volume of these costs. This graph clearly shows that the Yellow Cab company brings in much more revenue than the Pink Cab company, both in total and on each trip on average. 
+
+
+```{r}
+CashVsCard <- aggregate(Transaction_ID$Transaction.ID, by = list(Transaction_ID$Payment_Mode), FUN = mean, simplify = TRUE, drop = TRUE)
+barplot(CashVsCard$x, main = "Cash vs. Card", names.arg = c("Cash","Card"))
+```
+This shows the difference between the number of times a customer paid with cash compared to the number of times a customer paid with card. There is no notable difference, so this does not need to be factored into the final decision.
+
+
+Conclusion:
+
+Based on the trends within the data provided, I would recommend XYZ invest in the Yellow Cab company, particularly in Washington DC, New York, Chicago, or Boston. The Yellow Cab company showed that they bring in slightly more money on average for each trip, but when we look at the difference in total amount brought in, it becomes much more clear. The Yellow Cab company brings in much more money overall. Washington DC would be the ideal location to invest in because it has the highest average cost per trip while maintaining average trip distances that are consistent with the other cities. However, New York, Chicago, or Boston would also be good options because they also have higher than average cost per trip. 
